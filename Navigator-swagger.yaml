@@ -1,0 +1,102 @@
+swagger: "2.0"
+info:
+  title: Navigator API
+  description: API for navigating routes and adding new connections
+  version: 1.0.0
+host: localhost:8080
+basePath: /api/navigator
+schemes:
+  - http
+consumes:
+  - application/x-www-form-urlencoded
+produces:
+  - application/json
+paths:
+  /route/{id-from}/{id-to}/{shortest}:
+    get:
+      summary: Find shortest or longest route between locations
+      description: Retrieves the shortest or longest route between two locations
+      parameters:
+        - in: path
+          name: id-from
+          type: integer
+          required: true
+          description: ID of starting location
+        - in: path
+          name: id-to
+          type: integer
+          required: true
+          description: ID of ending location
+        - in: path
+          name: shortest
+          type: boolean
+          required: true
+          description: True for shortest route, False for longest route
+      responses:
+        200:
+          description: Route found
+          schema:
+            $ref: '#/definitions/Route'
+        404:
+          description: No route found
+        500:
+          description: Internal server error
+  /route/add/{id-from}/{id-to}/{distance}:
+    post:
+      summary: Add a new route between locations
+      description: Creates a new connection between two locations
+      parameters:
+        - in: path
+          name: id-from
+          type: integer
+          required: true
+          description: ID of starting location
+        - in: path
+          name: id-to
+          type: integer
+          required: true
+          description: ID of ending location
+        - in: path
+          name: distance
+          type: integer
+          required: true
+          description: Distance of the new route
+      responses:
+        201:
+          description: Route added successfully
+        400:
+          description: Invalid input data
+        404:
+          description: One or both locations not found
+        500:
+          description: Internal server error
+
+definitions:
+  Route:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier for the Route
+      from:
+        $ref: '#/definitions/Location'
+      to:
+        $ref: '#/definitions/Location'
+      distance:
+        type: integer
+        description: Distance of the Route
+  Location:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier for the Location
+      x:
+        type: float
+        description: X coordinate
+      y:
+        type: float
+        description: Y coordinate
+      z:
+        type: float
+        description: Z coordinate

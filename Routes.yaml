@@ -1,0 +1,307 @@
+swagger: "2.0"
+info:
+  title: Route Management API
+  description: API for managing a collection of Route objects
+  version: 1.0.0
+host: localhost:8080
+basePath: /api
+schemes:
+  - http
+consumes:
+  - application/x-www-form-urlencoded
+produces:
+  - application/json
+paths:
+  /routes:
+    post:
+      summary: Add a new Route
+      description: Creates a new Route object
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: id
+          type: integer
+          required: false
+          description: Unique identifier for the Route (auto-generated if not provided)
+        - in: formData
+          name: name
+          type: string
+          required: true
+          description: Name of the Route
+        - in: formData
+          name: coordinates_x
+          type: integer
+          required: true
+          description: X coordinate
+        - in: formData
+          name: coordinates_y
+          type: integer
+          required: true
+          description: Y coordinate
+        - in: formData
+          name: creationDate
+          type: string
+          format: date-time
+          required: false
+          description: Date and time of Route creation (auto-generated if not provided)
+        - in: formData
+          name: from_x
+          type: integer
+          required: false
+          description: X coordinate of starting point
+        - in: formData
+          name: from_y
+          type: float
+          required: false
+          description: Y coordinate of starting point
+        - in: formData
+          name: from_z
+          type: integer
+          required: false
+          description: Z coordinate of starting point
+        - in: formData
+          name: to_x
+          type: integer
+          required: false
+          description: X coordinate of ending point
+        - in: formData
+          name: to_y
+          type: float
+          required: false
+          description: Y coordinate of ending point
+        - in: formData
+          name: to_z
+          type: integer
+          required: false
+          description: Z coordinate of ending point
+        - in: formData
+          name: distance
+          type: integer
+          required: true
+          description: Distance of the Route
+      responses:
+        201:
+          description: Route created successfully
+        400:
+          description: Invalid input data
+    get:
+      summary: Get all Routes
+      description: Retrieves a list of all Route objects
+      parameters:
+        - in: query
+          name: sort
+          type: string
+          description: Field to sort by
+        - in: query
+          name: page
+          type: integer
+          description: Page number
+        - in: query
+          name: pageSize
+          type: integer
+          description: Number of items per page
+      responses:
+        200:
+          description: List of Routes
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Route'
+        400:
+          description: Invalid input data
+  /routes/{id}:
+    get:
+      summary: Get Route by ID
+      description: Retrieves a Route object by ID
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: ID of the Route to retrieve
+      responses:
+        200:
+          description: Route found
+          schema:
+            $ref: '#/definitions/Route'
+        404:
+          description: Route not found
+    put:
+      summary: Update Route
+      description: Updates an existing Route object
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: ID of the Route to update
+        - in: formData
+          name: name
+          type: string
+          required: true
+          description: Name of the Route
+        - in: formData
+          name: coordinates_x
+          type: integer
+          required: true
+          description: X coordinate
+        - in: formData
+          name: coordinates_y
+          type: integer
+          required: true
+          description: Y coordinate
+        - in: formData
+          name: creationDate
+          type: string
+          format: date-time
+          required: false
+          description: Date and time of Route creation
+        - in: formData
+          name: from_x
+          type: integer
+          required: false
+          description: X coordinate of starting point
+        - in: formData
+          name: from_y
+          type: float
+          required: false
+          description: Y coordinate of starting point
+        - in: formData
+          name: from_z
+          type: integer
+          required: false
+          description: Z coordinate of starting point
+        - in: formData
+          name: to_x
+          type: integer
+          required: false
+          description: X coordinate of ending point
+        - in: formData
+          name: to_y
+          type: float
+          required: false
+          description: Y coordinate of ending point
+        - in: formData
+          name: to_z
+          type: integer
+          required: false
+          description: Z coordinate of ending point
+        - in: formData
+          name: distance
+          type: integer
+          required: true
+          description: Distance of the Route
+      responses:
+        200:
+          description: Route updated successfully
+        400:
+          description: Invalid input data
+        404:
+          description: Route not found
+    delete:
+      summary: Delete Route
+      description: Deletes a Route object
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: ID of the Route to delete
+      responses:
+        204:
+          description: Route deleted successfully
+        404:
+          description: Route not found
+  /routes/distance-sum:
+    get:
+      summary: Calculate sum of distances
+      description: Calculates the sum of distances for all Routes
+      responses:
+        200:
+          description: Sum of distances
+          schema:
+            type: integer
+        500:
+          description: Internal server error
+  /routes/latest:
+    get:
+      summary: Get latest Route
+      description: Retrieves the Route with the latest creation date
+      responses:
+        200:
+          description: Latest Route found
+          schema:
+            $ref: '#/definitions/Route'
+        404:
+          description: No Routes found
+  /routes/less-than-distance/{distance}:
+    get:
+      summary: Get Routes with distance less than specified value
+      description: Retrieves Routes with distance less than the specified value
+      parameters:
+        - in: path
+          name: distance
+          type: integer
+          required: true
+          description: Maximum distance
+      responses:
+        200:
+          description: List of matching Routes
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Route'
+
+definitions:
+  Route:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier for the Route
+      name:
+        type: string
+        description: Name of the Route
+      coordinates:
+        type: object
+        properties:
+          x:
+            type: integer
+            description: X coordinate
+          y:
+            type: integer
+            description: Y coordinate
+      creationDate:
+        type: string
+        format: date-time
+        description: Date and time of Route creation
+      from:
+        type: object
+        properties:
+          x:
+            type: integer
+            description: X coordinate of starting point
+          y:
+            type: float
+            description: Y coordinate of starting point
+          z:
+            type: integer
+            description: Z coordinate of starting point
+      to:
+        type: object
+        properties:
+          x:
+            type: integer
+            description: X coordinate of ending point
+          y:
+            type: float
+            description: Y coordinate of ending point
+          z:
+            type: integer
+            description: Z coordinate of ending point
+      distance:
+        type: integer
+        description: Distance of the Route
