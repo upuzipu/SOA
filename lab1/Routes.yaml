@@ -52,7 +52,8 @@ paths:
           description: X coordinate of starting point
         - in: formData
           name: from_y
-          type: float
+          type: number
+          format: float
           required: false
           description: Y coordinate of starting point
         - in: formData
@@ -67,7 +68,8 @@ paths:
           description: X coordinate of ending point
         - in: formData
           name: to_y
-          type: float
+          type: number
+          format: float
           required: false
           description: Y coordinate of ending point
         - in: formData
@@ -166,7 +168,8 @@ paths:
           description: X coordinate of starting point
         - in: formData
           name: from_y
-          type: float
+          type: number
+          format: float
           required: false
           description: Y coordinate of starting point
         - in: formData
@@ -181,7 +184,8 @@ paths:
           description: X coordinate of ending point
         - in: formData
           name: to_y
-          type: float
+          type: number
+          format: float
           required: false
           description: Y coordinate of ending point
         - in: formData
@@ -285,7 +289,8 @@ definitions:
             type: integer
             description: X coordinate of starting point
           y:
-            type: float
+            type: number
+            format: float
             description: Y coordinate of starting point
           z:
             type: integer
@@ -297,7 +302,8 @@ definitions:
             type: integer
             description: X coordinate of ending point
           y:
-            type: float
+            type: number
+            format: float
             description: Y coordinate of ending point
           z:
             type: integer
